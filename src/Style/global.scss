@@ -6,10 +6,18 @@
 
 :root{
     --white: #fff;
-    --gray
+    --gray-100: #e1e1e1;
+    --gray-300:#a8a8b3;
+    --gray-900:#121214;
+
+    --cyan: #61dafd;
+    --yellow: #eba417;
 }
 
-body{}
+body{
+    background: var(--gray-900);
+    color: var(--white);
+}
 
 body, textarea, input, select, button{
     font: 400 1rem 'Roboto', sans-serif;
