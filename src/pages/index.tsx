@@ -1,13 +1,13 @@
 import Head from 'next/head';
-import { GetServerSideProps } from 'next'
+import { GetStaticProps } from 'next'
 import Styles from './home.module.scss'
 import SubscribeButton from '../Components/SubscribeButton';
 import {stripe} from '../Services/stripe'
 
 interface ProductsProps{
   Product: {
-    PriceId: string,
-    amount: number
+    priceId: string,
+    amount: string
   }
 }
 
@@ -32,7 +32,7 @@ export default function Home({Product}: ProductsProps) {
           get access to all the publications <br />
           <span>for {Product.amount} month</span>
         </p>
-        <SubscribeButton/>
+        <SubscribeButton priceId={Product.priceId}/>
       </section>
 
       <img src="/images/avatar.png" alt="conding"/>
@@ -42,20 +42,24 @@ export default function Home({Product}: ProductsProps) {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getStaticProps: GetStaticProps = async () => {
 
   const price = await stripe.prices.retrieve('price_1KVwrULuhY4LXBRJwHfbrp3V', {
     expand: ['product']
   })
 
   const Product = {
-    PriceID: price.id,
-    amount: price.unit_amount / 100
+    priceId: price.id,
+    amount: new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+    }).format(price.unit_amount / 100),
   }
 
   return{
     props:{
       Product,
-    }
+    },
+    revalidate: 60 * 60 * 24, // 24 hours
   }
 }
