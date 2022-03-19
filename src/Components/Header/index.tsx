@@ -6,7 +6,7 @@ export const Header = () => {
     return(
         <header className={Styles.headerContainer}>
             <div className={Styles.headerContent}>
-                <h1>Ig.News</h1>
+                <h1>IG.News</h1>
                 <nav>
                     <a className={Styles.active}>Home</a>
                     <a>Posts</a>
