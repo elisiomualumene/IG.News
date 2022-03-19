@@ -1,12 +1,12 @@
 import NextAuth from 'next-auth'
-import Providers from 'next-auth/providers'
+import providers from "next-auth/providers"
 
 export default NextAuth({
   providers: [
-    Providers.GitHub({
+    providers.GitHub({
       clientId: process.env.GITHUB_ID,
       clientSecret: process.env.GITHUB_SECRET,
-      scope: 'read:user'
+      scope:'read:user'
     }),
   ],
 })
