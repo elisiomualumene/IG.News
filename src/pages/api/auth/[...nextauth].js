@@ -13,40 +13,45 @@ export default NextAuth({
       scope:'read:user'
     }),
   ],
-  secret: process.env.SIGNIN_KEY,
+
+  jwt: {
+    signingKey: process.env.SIGNING_KEY
+  },
+
   callbacks: {
-    async signIn({ user }) {
+    async signIn( {user, account, profile} ) {
+
+      const email  = user
 
         try {
         await client.query(
-          q.If(
-            q.Not(
-              q.Exists(
+            q.If(
+              q.Not(
+                q.Exists(
+                  q.Match(
+                    q.Index('users_by_email'),
+                    q.Casefold(user.email)
+                  )
+                )
+              ),
+              q.Create(
+                q.Collection('users'),
+                { data: { email }}
+              ),
+              q.Get(
                 q.Match(
                   q.Index('users_by_email'),
                   q.Casefold(user.email)
                 )
               )
-            ),
-            q.Create(
-              q.Collection('users'),
-              {data: {user}}
-            ),
-            q.Get(
-              q.Match(
-                q.Index('users_by_email'),
-                q.Casefold(user.email)
-                )
-              )
             )
           )
 
-        return true
-      } 
-      
-      catch {
-        return false
+        return true }
+        catch {
+           return false
+          }
+
       }
     }
-  }
 })
