@@ -21,7 +21,7 @@ export default NextAuth({
   callbacks: {
     async signIn( {user, account, profile} ) {
 
-      const email  = user
+    //  const email  = user
 
         try {
         await client.query(
@@ -36,7 +36,7 @@ export default NextAuth({
               ),
               q.Create(
                 q.Collection('users'),
-                { data: { email }}
+                { data: { user }}
               ),
               q.Get(
                 q.Match(
